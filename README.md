@@ -1,2 +1,3 @@
-# FlutterToDo
-a todo app by Flutter
+# flutter_todo
+
+a todo App by flutter.
