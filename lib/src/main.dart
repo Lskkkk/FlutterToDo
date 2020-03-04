@@ -43,7 +43,11 @@ class _Home extends State<Home> {
                     itemCount: list.length,
                     itemBuilder: (BuildContext context, int index) {
                       return Item(
-                          list[index].content, list[index].isSelected, toggle);
+                          ValueKey(list[index].content),
+                          list[index].content,
+                          list[index].isSelected,
+                          this.toggle,
+                          this.delete);
                     },
                     shrinkWrap: true)
               ],
@@ -61,6 +65,11 @@ class _Home extends State<Home> {
 
   void add(content) {
     store.add(StoreItem(false, content));
+    setState(() {});
+  }
+
+  void delete(content) {
+    store.delete(content);
     setState(() {});
   }
 }

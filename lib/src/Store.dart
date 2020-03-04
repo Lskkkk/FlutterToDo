@@ -28,6 +28,12 @@ class ToDoStore {
     this._write();
   }
 
+  delete(String content) {
+    final item = list.firstWhere((i) => i.content == content);
+    list.remove(item);
+    this._write();
+  }
+
   Future<bool> _read() async {
     final prefs = await SharedPreferences.getInstance();
     final List<String> storeData = prefs.getStringList(this.saveKey);
