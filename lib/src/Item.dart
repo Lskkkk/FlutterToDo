@@ -3,7 +3,8 @@ import 'package:flutter/material.dart';
 class Item extends StatelessWidget {
   final String content;
   final bool isSelected;
-  Item(this.content, this.isSelected);
+  final Function toggle;
+  Item(this.content, this.isSelected, this.toggle);
 
   @override
   Widget build(BuildContext context) {
@@ -15,7 +16,7 @@ class Item extends StatelessWidget {
           children: <Widget>[
             Checkbox(
                 onChanged: (val) {
-                  return !val;
+                  this.toggle(this.content);
                 },
                 value: this.isSelected),
             Text(

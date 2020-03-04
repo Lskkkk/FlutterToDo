@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_todo/src/Input.dart';
 import 'package:flutter_todo/src/Item.dart';
+import 'package:flutter_todo/src/Store.dart';
 
 class Todo extends StatelessWidget {
   @override
@@ -12,9 +13,23 @@ class Todo extends StatelessWidget {
   }
 }
 
-class Home extends StatelessWidget {
+class Home extends StatefulWidget {
+  @override
+  _Home createState() => _Home();
+}
+
+class _Home extends State<Home> {
+  ToDoStore store = ToDoStore();
+
+  @override
+  void initState() {
+    super.initState();
+    this._load();
+  }
+
   @override
   Widget build(BuildContext context) {
+    var list = store.get();
     return Scaffold(
         appBar: AppBar(
           title: Text('ToDo List'),
@@ -23,11 +38,29 @@ class Home extends StatelessWidget {
             color: Colors.white,
             child: Column(
               children: <Widget>[
-                Input(),
-                Item('eat some food', true),
-                Item('drink some water', true),
-                Item('sleep for a while', false)
+                Input(add),
+                ListView.builder(
+                    itemCount: list.length,
+                    itemBuilder: (BuildContext context, int index) {
+                      return Item(
+                          list[index].content, list[index].isSelected, toggle);
+                    },
+                    shrinkWrap: true)
               ],
             )));
+  }
+
+  void _load() {
+    store.init().then((val) => setState(() {}));
+  }
+
+  void toggle(content) {
+    store.toggle(content);
+    setState(() {});
+  }
+
+  void add(content) {
+    store.add(StoreItem(false, content));
+    setState(() {});
   }
 }
