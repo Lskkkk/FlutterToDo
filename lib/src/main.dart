@@ -39,19 +39,21 @@ class _Home extends State<Home> {
             child: Column(
               children: <Widget>[
                 Input(add),
-                ListView.builder(
-                    itemCount: list.length,
-                    itemBuilder: (BuildContext context, int index) {
-                      return Item(
-                          // key有两个作用：1. 根据key去标识一个组件实例是否需要更新状态。2. key相同时即使数据不同，界面不会刷新。
-                          ValueKey(list[index].content +
-                              list[index].isSelected.toString()),
-                          list[index].content,
-                          list[index].isSelected,
-                          this.toggle,
-                          this.delete);
-                    },
-                    shrinkWrap: true)
+                Expanded(
+                  child: ListView.builder(
+                      itemCount: list.length,
+                      itemBuilder: (BuildContext context, int index) {
+                        return Item(
+                            // key有两个作用：1. 根据key去标识一个组件实例是否需要更新状态。2. key相同时即使数据不同，界面不会刷新。
+                            ValueKey(list[index].content +
+                                list[index].isSelected.toString()),
+                            list[index].content,
+                            list[index].isSelected,
+                            this.toggle,
+                            this.delete);
+                      },
+                      shrinkWrap: true),
+                ),
               ],
             )));
   }

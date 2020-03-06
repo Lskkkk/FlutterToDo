@@ -27,52 +27,60 @@ class _Item extends State<Item> {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onHorizontalDragUpdate: (DragUpdateDetails details) {
-        final dx = details.delta.dx;
-        if (dx < 0) {
-          onScrollingLeft(dx);
-        } else {
-          onScrollingRight(dx);
-        }
-      },
-      onHorizontalDragEnd: (DragEndDetails details) {
-        onScrollEnd();
-      },
-      child: Container(
+        onHorizontalDragUpdate: (DragUpdateDetails details) {
+          final dx = details.delta.dx;
+          if (dx < 0) {
+            onScrollingLeft(dx);
+          } else {
+            onScrollingRight(dx);
+          }
+        },
+        onHorizontalDragEnd: (DragEndDetails details) {
+          onScrollEnd();
+        },
+        onTapUp: (TapUpDetails details) {
+          this.toggle(this.content);
+        },
+        child: Container(
           color: this.onTouch
               ? Color.fromRGBO(123, 12, 32, 0.5)
               : Color.fromRGBO(235, 235, 235, 0.5),
-          margin: EdgeInsets.fromLTRB(0, 0, 0, 2),
-          child: Row(
-            children: <Widget>[
-              Expanded(
-                  child: Row(children: <Widget>[
-                Checkbox(
-                    onChanged: (val) {
-                      this.toggle(this.content);
-                    },
-                    value: this.isSelected),
-                Text(
-                  this.content,
-                  style: TextStyle(fontSize: 20, color: Colors.black87),
-                ),
-              ])),
-              Transform.translate(
-                offset: Offset(distance, 0),
-                child: Container(
-                  width: deleteButtonWidth,
-                  height: 60,
-                  color: Color.fromRGBO(255, 50, 50, 0.4),
-                  child: IconButton(
-                      icon: Icon(Icons.delete_outline),
-                      onPressed: () {
-                        this.delete(this.content);
-                      }),
-                ),
-              )
-            ],
-          )),
-    );
+          margin: EdgeInsets.fromLTRB(0, 0, 0, 4),
+          padding: EdgeInsets.fromLTRB(30, 0, 0, 0),
+          height: 80,
+          child: ConstrainedBox(
+              constraints: BoxConstraints.expand(),
+              child: Stack(
+                alignment: Alignment.centerLeft,
+                children: <Widget>[
+                  Text(this.content,
+                      style: isSelected
+                          ? TextStyle(
+                              fontSize: 20,
+                              color: Color.fromRGBO(30, 30, 30, 0.3),
+                              decoration: TextDecoration.lineThrough)
+                          : TextStyle(fontSize: 20, color: Colors.black87),
+                      overflow: TextOverflow.ellipsis),
+                  Positioned( // 删除按钮使用绝对定位，配合Stack使用
+                    child: Transform.translate(
+                      offset: Offset(distance, 0),
+                      child: Container(
+                        width: deleteButtonWidth,
+                        color: Color.fromRGBO(255, 50, 50, 1),
+                        child: IconButton(
+                            icon: Icon(Icons.delete_outline),
+                            onPressed: () {
+                              this.delete(this.content);
+                            }),
+                      ),
+                    ),
+                    bottom: 0,
+                    right: 0,
+                    top: 0,
+                  )
+                ],
+              )),
+        ));
   }
 
   onScrollingLeft(dx) {
@@ -83,7 +91,7 @@ class _Item extends State<Item> {
       });
     } else {
       setState(() {
-        distance = (distance + dx) < 0 ? 0 : distance + dx;
+        distance = (distance + dx) < 20 ? 0 : distance + dx;
       });
     }
   }
