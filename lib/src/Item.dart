@@ -83,7 +83,7 @@ class _Item extends State<Item> {
       });
     } else {
       setState(() {
-        distance += dx;
+        distance = (distance + dx) < 0 ? 0 : distance + dx;
       });
     }
   }
